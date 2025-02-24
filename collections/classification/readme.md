@@ -157,5 +157,3 @@ LHM   NavigableMap
 - **Maps** store key-value pairs.
 - **Navigable and Sorted interfaces** provide ordering and navigation support.
 
-This guide provides a complete overview of the **Java Collection Framework** with organized, structured, and visual content. 🚀 Let me know if you need further clarifications!
-
