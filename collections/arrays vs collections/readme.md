@@ -41,7 +41,6 @@ To overcome these limitations, the **Collections Framework** was introduced, pro
 | **Performance** | Faster performance as it directly stores elements. | Slightly slower due to additional overhead. |
 | **Element Type** | Can store only homogeneous data types. | Can store both homogeneous and heterogeneous data types. |
 | **Data Structure** | No underlying data structure, requiring manual implementation of operations. | Based on standard data structures, providing ready-made method support. |
-| **Primitive Support** | Can store both primitive types and objects. | Can store only objects, not primitives. |
 
 Collections provide a flexible and efficient alternative to arrays, making them a preferred choice for modern Java programming.
 
