@@ -476,6 +476,250 @@ class MyComparator implements Comparator<String> {
 - `TreeMap` provides **automatic key sorting** and supports **custom comparators**.
 - `Null keys` are **not allowed from Java 1.7 onwards**, but **null values are allowed**.
 
+# **HashTable in Java**
+
+## **Introduction**
+- `Hashtable` is a **legacy class** in Java (introduced in Java 1.0).
+- It implements the `Map` interface and stores **key-value pairs**.
+- **Thread-safe** and **synchronized**.
+- **Does not allow null keys or values**.
+- Uses **hashing** to store and retrieve elements efficiently.
+
+---
+## **Hashtable Hierarchy**
+```
+                Map(I)
+                  |
+          ----------------
+          |              |
+    HashMap        Hashtable (1.0)
+                      |
+                 Properties (1.0)
+```
+
+---
+## **Key Features of Hashtable**
+- The underlying **data structure** is a **HashTable**.
+- **Insertion order is not preserved**.
+- **Thread-safe** (all methods are synchronized).
+- **Duplicate keys are not allowed**, but **duplicate values are allowed**.
+- **Null keys and null values are not allowed**.
+- Implements `Serializable` and `Cloneable`.
+
+---
+## **Constructors in Hashtable**
+
+| Constructor | Description |
+|------------|-------------|
+| `Hashtable()` | Creates an empty Hashtable with default capacity **11** and load factor **0.75**. |
+| `Hashtable(int initialCapacity)` | Creates a Hashtable with a **specified capacity**. |
+| `Hashtable(int initialCapacity, float loadFactor)` | Creates a Hashtable with **custom capacity and load factor**. |
+| `Hashtable(Map m)` | Creates a Hashtable from another Map. |
+
+---
+## **Example: Basic Hashtable Operations**
+```java
+import java.util.*;
+
+public class HashtableExample {
+    public static void main(String[] args) {
+        Hashtable<Integer, String> ht = new Hashtable<>();
+
+        ht.put(1, "Apple");
+        ht.put(2, "Banana");
+        ht.put(3, "Cherry");
+        ht.put(4, "Date");
+        
+        System.out.println("Hashtable: " + ht);
+        
+        // Accessing values
+        System.out.println("Value for key 2: " + ht.get(2));
+        
+        // Checking if key exists
+        System.out.println("Contains key 3? " + ht.containsKey(3));
+        
+        // Checking if value exists
+        System.out.println("Contains value 'Banana'? " + ht.containsValue("Banana"));
+        
+        // Removing an entry
+        ht.remove(4);
+        System.out.println("After removing key 4: " + ht);
+    }
+}
+```
+### **Output:**
+```
+Hashtable: {1=Apple, 2=Banana, 3=Cherry, 4=Date}
+Value for key 2: Banana
+Contains key 3? true
+Contains value 'Banana'? true
+After removing key 4: {1=Apple, 2=Banana, 3=Cherry}
+```
+
+---
+## **Hashtable vs HashMap**
+| Feature | Hashtable | HashMap |
+|---------|----------|---------|
+| **Thread-Safety** | ✅ Synchronized (Thread-safe) | ❌ Not synchronized |
+| **Performance** | 🐢 Slower (due to synchronization) | 🚀 Faster |
+| **Null Keys Allowed?** | ❌ No | ✅ Yes (Only one) |
+| **Null Values Allowed?** | ❌ No | ✅ Yes (Multiple) |
+| **Introduced In** | Java 1.0 (Legacy) | Java 1.2 |
+
+---
+## **How to Get a Synchronized HashMap (Alternative to Hashtable)**
+```java
+import java.util.*;
+
+public class SynchronizedHashMapExample {
+    public static void main(String[] args) {
+        Map<Integer, String> map = new HashMap<>();
+        Map<Integer, String> syncMap = Collections.synchronizedMap(map);
+    }
+}
+```
+
+---
+# **Java Properties Class**
+
+## **Introduction**
+- In Java, **Properties** are used to store **configuration settings** (e.g., usernames, passwords, email IDs, database URLs, etc.).
+- Hardcoding such values in a Java program is **not recommended** because any changes require recompilation, rebuild, redeployment, and sometimes a server restart.
+- Instead, **a properties file** can store these settings, and Java can read them dynamically.
+- The advantage: **Updating the properties file does not require recompilation, avoiding business impact.**
+
+---
+## **Key Differences: Properties vs. Other Maps**
+| Feature | Properties | HashMap / Hashtable / TreeMap |
+|---------|-----------|--------------------------------|
+| **Key-Value Type** | ✅ Only `String` keys & values | 🔄 Any object type |
+| **Persistence** | ✅ Can be **saved to a file** | ❌ No built-in file storage |
+| **Usage** | ✅ Configuration settings | 🔄 General key-value mapping |
+
+---
+## **Creating a Properties Object**
+```java
+Properties p = new Properties();
+```
+
+---
+## **Methods in Properties Class**
+| Method | Description |
+|--------|-------------|
+| `setProperty(String key, String value)` | Adds or updates a property. Returns the old value if key exists. |
+| `getProperty(String key)` | Retrieves the value of a specified property. Returns `null` if not found. |
+| `propertyNames()` | Returns an `Enumeration` of all property keys. |
+| `load(InputStream is)` | Loads properties from a file into a Java properties object. |
+| `store(OutputStream os, String comment)` | Saves properties from a Java properties object into a file. |
+
+---
+## **How Properties Work (Diagram)**
+```
+|---------------|      load()      |--------------|
+| Properties    |---------------->| Java         |
+| File (.properties) |              | Properties   |
+|               |<----------------| Object       |
+|---------------|      store()     |--------------|
+```
+
+---
+## **Example: Reading from a Properties File**
+### **Sample `config.properties` file**
+```
+username=admin
+password=secret
+url=jdbc:mysql://localhost:3306/mydb
+```
+### **Java Code to Read Properties**
+```java
+import java.io.*;
+import java.util.*;
+
+public class PropertiesExample {
+    public static void main(String[] args) throws Exception {
+        Properties p = new Properties();
+        FileInputStream fis = new FileInputStream("config.properties");
+        p.load(fis);
+
+        System.out.println("Properties: " + p);
+        System.out.println("Username: " + p.getProperty("username"));
+    }
+}
+```
+### **Output:**
+```
+Properties: {username=admin, password=secret, url=jdbc:mysql://localhost:3306/mydb}
+Username: admin
+```
+
+---
+## **Example: Writing to a Properties File**
+```java
+import java.io.*;
+import java.util.*;
+
+public class WritePropertiesExample {
+    public static void main(String[] args) throws Exception {
+        Properties p = new Properties();
+        p.setProperty("appName", "My Java App");
+        p.setProperty("version", "1.0.0");
+
+        FileOutputStream fos = new FileOutputStream("app.properties");
+        p.store(fos, "Application Configuration");
+        System.out.println("Properties saved.");
+    }
+}
+```
+### **Output (Saved File: `app.properties`)**
+```
+#Application Configuration
+#Tue Feb 25 2025
+appName=My Java App
+version=1.0.0
+```
+
+---
+## **Real-World Example: Database Connection Using Properties**
+```java
+import java.io.*;
+import java.sql.*;
+import java.util.*;
+
+public class DatabaseConnection {
+    public static void main(String[] args) throws Exception {
+        Properties p = new Properties();
+        FileInputStream fis = new FileInputStream("db.properties");
+        p.load(fis);
+
+        String url = p.getProperty("url");
+        String user = p.getProperty("user");
+        String password = p.getProperty("password");
+
+        Connection con = DriverManager.getConnection(url, user, password);
+        System.out.println("Connected to Database!");
+    }
+}
+```
+### **Sample `db.properties` File**
+```
+url=jdbc:mysql://localhost:3306/testdb
+user=root
+password=root123
+```
+
+---
+## **Key Takeaways**
+✅ **Properties** are ideal for configuration settings.
+✅ **No recompilation required** when modifying external properties.
+✅ **Only `String` keys and values** are allowed.
+✅ **Can be loaded from and saved to a file.**
+
+This guide provides a structured explanation of **Java Properties**, with examples and best practices. 🚀
+
+
+
+
+
 
 
 
