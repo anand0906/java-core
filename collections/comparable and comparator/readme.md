@@ -1,7 +1,56 @@
 -----------------
+Comparable
+-----------------
+Comparable is present in the java.lang package and is used to define the natural sorting order of objects.
+
+1. public int compareTo(Object obj)
+   - Returns -ve if the current object should come before obj
+   - Returns +ve if the current object should come after obj
+   - Returns 0 if both objects are equal
+
+### Example: Sorting Employee Objects by Employee ID using Comparable
+
+```java
+import java.util.*;
+
+class Employee implements Comparable<Employee> {
+    String name;
+    int eid;
+
+    public Employee(String name, int eid) {
+        this.name = name;
+        this.eid = eid;
+    }
+
+    @Override
+    public String toString() {
+        return name + "--" + eid;
+    }
+
+    @Override
+    public int compareTo(Employee e) {
+        return Integer.compare(this.eid, e.eid);
+    }
+}
+
+class ComparableDemo {
+    public static void main(String[] args) {
+        TreeSet<Employee> t = new TreeSet<>();
+        t.add(new Employee("Nag", 100));
+        t.add(new Employee("Balaiah", 200));
+        t.add(new Employee("Chiru", 50));
+        t.add(new Employee("Venki", 150));
+        System.out.println(t);
+    }
+}
+```
+
+**Output:** `[Chiru--50, Nag--100, Venki--150, Balaiah--200]`
+
+-----------------
 Comparator
 -----------------
-Comparator present in java.util package and it defines two methods compare() & equals().
+Comparator is present in the java.util package and defines two methods compare() & equals().
 
 1. public int compare(Object obj1, Object obj2)
    - Returns -ve if and only if obj1 has to come before obj2
