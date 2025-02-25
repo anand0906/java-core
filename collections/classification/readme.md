@@ -14,30 +14,7 @@ The Java Collection Framework is broadly classified into three major categories:
 ### **C. Iterator Interface (Traversing Collections)**
 
 #### **Visual Representation of Collection Framework**
-```
-                Iterable (Root Interface)
-                      |
-                Collection (I)
-             /      |         \ 
-         List     Set      Queue
-        /   |   /    \      |
-ArrayList  LL HS   LHS  PriorityQueue
-                \    |
-              TreeSet NavigableSet
-                      |
-                   SortedSet
-```
-```
-                Map (I)
-                   |
-          ----------------
-          |              |
-      SortedMap       HashMap
-          |               |
-     NavigableMap    LinkedHashMap
-          |
-      TreeMap
-```
+
 
 ---
 ## **2. Key Interfaces in Java Collection Framework**
