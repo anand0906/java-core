@@ -234,20 +234,24 @@ Exception in thread "main" java.lang.ClassCastException: java.lang.StringBuffer
 - It is used to store unique elements in an **unordered or sorted manner**, depending on the implementation.
 
 ---
-## **Comparison Table: HashSet vs LinkedHashSet vs TreeSet**
+------------------------------------------------
+Comparison table of Set Implementations
+------------------------------------------------
 
-| Feature | HashSet | LinkedHashSet | TreeSet |
-|---------|--------|--------------|---------|
-| **Underlying Data Structure** | HashTable | LinkedList + HashTable | Balanced Tree (Red-Black Tree) |
-| **Insertion Order** | ❌ Not preserved | ✅ Preserved | ❌ Not preserved (Sorted Order) |
-| **Sorting Order** | ❌ No sorting | ❌ No sorting | ✅ Natural or Custom Sorting |
-| **Duplicates Allowed** | ❌ No | ❌ No | ❌ No |
-| **Null Allowed?** | ✅ Yes (only once) | ✅ Yes (only once) | ❌ No (Java 1.7+) |
-| **Heterogeneous Objects** | ✅ Yes | ✅ Yes | ❌ No (Throws `ClassCastException`) |
-| **Performance (Best Case - O(1))** | 🚀 Fastest (O(1) for add, remove, contains) | ⚡ Fast (O(1)) | 🐢 Slowest (O(log n)) |
-| **Use Case** | Fast lookups, no order needed | Cache-based apps where insertion order matters | Sorted unique elements |
+| Property                 | HashSet            | LinkedHashSet                | TreeSet                 |
+|--------------------------|--------------------|------------------------------|-------------------------|
+| **Underlying Data Structure** | HashTable          | Combination of LinkedList & HashTable | Balanced Tree (Red-Black Tree) |
+| **Duplicates Allowed**   | ❌ Not Allowed     | ❌ Not Allowed               | ❌ Not Allowed          |
+| **Insertion Order**      | ❌ Not Preserved   | ✅ Preserved                 | ❌ Not Preserved        |
+| **Sorting Order**        | ❌ NA              | ❌ NA                         | ✅ Sorted (Natural/Custom) |
+| **Heterogeneous Objects** | ✅ Allowed        | ✅ Allowed                   | ❌ Not Allowed         |
+| **Null Acceptance**      | ✅ Allowed (Once)  | ✅ Allowed (Once)            | ❌ Not Allowed (Java 1.7+) |
 
----
+### **Key Takeaways**
+- **Use `HashSet`** when **order does not matter** and **fast lookups** are needed.
+- **Use `LinkedHashSet`** when **insertion order needs to be maintained**.
+- **Use `TreeSet`** when **sorted unique elements** are required.
+
 
 
 
