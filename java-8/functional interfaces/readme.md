@@ -250,5 +250,174 @@ public class Test {
 - Java provides built-in functional interfaces like `Runnable`, `Callable`, and `Comparator`.
 - The `@FunctionalInterface` annotation ensures an interface adheres to the functional interface contract.
 
+Java SE 8 included four main kinds of functional interfaces which can be applied in multiple situations as mentioned below:
+
+- Consumer
+- Predicate
+- Function 
+- Supplier
+
+### Predicate
+- A predicate is a function with a single argument and returns a boolean value.
+- To implement predicate functions in Java, Oracle introduced the `Predicate` interface in Java 8 (i.e., `Predicate<T>`).
+- The `Predicate` interface is present in the `java.util.function` package.
+- It is a functional interface and contains only one method: `test()`.
+
+#### Example:
+```java
+interface Predicate<T> {
+    boolean test(T t);
+}
+```
+
+As `Predicate` is a functional interface, it can refer to a lambda expression.
+
+#### Example 1: Write a predicate to check whether the given integer is greater than 10 or not.
+```java
+public boolean test(Integer I) {
+    return I > 10;
+}
+```
+
+Using lambda expression:
+```java
+Predicate<Integer> p = I -> I > 10;
+System.out.println(p.test(100)); // true
+System.out.println(p.test(7));   // false
+```
+
+#### Full Program:
+```java
+import java.util.function.Predicate;
+
+public class Test {
+    public static void main(String[] args) {
+        Predicate<Integer> p = i -> i > 10;
+        System.out.println(p.test(100)); // true
+        System.out.println(p.test(7));   // false
+    }
+}
+```
+
+### More Examples:
+#### 1. Write a predicate to check if the length of a given string is greater than 3.
+```java
+Predicate<String> p = s -> s.length() > 3;
+System.out.println(p.test("rvkb")); // true
+System.out.println(p.test("rk"));  // false
+```
+
+#### 2. Write a predicate to check whether the given collection is empty or not.
+```java
+Predicate<Collection> p = c -> c.isEmpty();
+```
+
+### Predicate Joining
+It is possible to join predicates into a single predicate using the following methods:
+- `and()`
+- `or()`
+- `negate()`
+
+These methods are equivalent to logical AND (`&&`), OR (`||`), and NOT (`!`) operators, respectively.
+
+#### Example:
+```java
+import java.util.function.Predicate;
+
+public class PredicateExample {
+    public static void main(String[] args) {
+        int[] x = {0, 5, 10, 15, 20, 25, 30};
+        Predicate<Integer> p1 = i -> i > 10;
+        Predicate<Integer> p2 = i -> i % 2 == 0;
+        
+        System.out.println("Numbers Greater Than 10:");
+        filterNumbers(p1, x);
+        
+        System.out.println("Even Numbers:");
+        filterNumbers(p2, x);
+        
+        System.out.println("Numbers Not Greater Than 10:");
+        filterNumbers(p1.negate(), x);
+        
+        System.out.println("Numbers Greater Than 10 AND Even:");
+        filterNumbers(p1.and(p2), x);
+        
+        System.out.println("Numbers Greater Than 10 OR Even:");
+        filterNumbers(p1.or(p2), x);
+    }
+    
+    public static void filterNumbers(Predicate<Integer> p, int[] x) {
+        for (int num : x) {
+            if (p.test(num)) {
+                System.out.println(num);
+            }
+        }
+    }
+}
+```
+This program demonstrates different predicate operations, including negation, conjunction (`and`), and disjunction (`or`).
+
+### Function
+- Functions are similar to predicates except that functions can return any type of result.
+- A function should return only one value, but that value can be of any type as per the requirement.
+- To implement functions, Oracle introduced the `Function` interface in Java 8.
+- The `Function` interface is present in the `java.util.function` package.
+- It contains only one method: `apply()`.
+
+#### Example:
+```java
+interface Function<T, R> {
+    R apply(T t);
+}
+```
+
+#### Example: Write a function to find the length of a given input string.
+```java
+import java.util.function.Function;
+
+public class FunctionExample {
+    public static void main(String[] args) {
+        Function<String, Integer> f = s -> s.length();
+        System.out.println(f.apply("Durga")); // 5
+        System.out.println(f.apply("Soft"));  // 4
+    }
+}
+```
+
+### Consumer
+- A `Consumer` is a function that takes a single argument and does not return any value.
+- The `Consumer` interface is present in the `java.util.function` package.
+- It contains only one method: `accept()`.
+
+#### Example:
+```java
+import java.util.function.Consumer;
+
+public class ConsumerExample {
+    public static void main(String[] args) {
+        Consumer<String> c = s -> System.out.println(s);
+        c.accept("Hello World");
+    }
+}
+```
+
+### Supplier
+- A `Supplier` is a function that takes no arguments and returns a value.
+- The `Supplier` interface is present in the `java.util.function` package.
+- It contains only one method: `get()`.
+
+#### Example:
+```java
+import java.util.function.Supplier;
+
+public class SupplierExample {
+    public static void main(String[] args) {
+        Supplier<Double> s = () -> Math.random();
+        System.out.println(s.get());
+        System.out.println(s.get());
+    }
+}
+```
+
 
 
