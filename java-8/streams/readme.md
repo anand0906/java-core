@@ -255,3 +255,157 @@ System.out.println(flatMapped); // [Hello, World, Java, Streams]
 - **`map()`** is used for transforming **each element** of a collection.
 - **`flatMap()`** is used when you need to **flatten nested structures** before processing them further.
 
+## Java 9 Enhancements for Stream API 
+
+Java 9 introduced several enhancements to the **Stream API**, adding powerful methods for better control over stream operations. The following new methods were introduced:
+
+1. **takeWhile()**  
+2. **dropWhile()**  
+3. **Stream.iterate()**  
+4. **Stream.ofNullable()**  
+
+> **Note:**  
+> - `takeWhile()` and `dropWhile()` are **default methods** of the `Stream` interface.  
+> - `iterate()` and `ofNullable()` are **static methods** of the `Stream` interface.  
+
+---
+
+## **1. takeWhile() Method**  
+
+### **Definition:**  
+- The `takeWhile()` method returns a **stream of elements** that satisfy the given predicate.  
+- It is **similar** to the `filter()` method but with a **key difference**:  
+  - `filter()` processes **all** elements and selects those that match the predicate.  
+  - `takeWhile()` processes elements **until** the predicate **fails**. Once it fails, the rest of the elements are discarded.  
+
+### **Syntax:**  
+```java
+default Stream<T> takeWhile(Predicate<? super T> predicate)
+```
+
+### **Example:**  
+```java
+import java.util.*;
+import java.util.stream.*;
+
+public class TakeWhileExample {
+    public static void main(String[] args) {
+        List<Integer> numbers = Arrays.asList(2, 4, 6, 3, 7, 8, 10);
+        
+        List<Integer> result = numbers.stream()
+                                    .takeWhile(n -> n % 2 == 0) // Stops at the first odd number
+                                    .collect(Collectors.toList());
+        
+        System.out.println("After takeWhile: " + result);
+    }
+}
+```
+**Output:**  
+```
+After takeWhile: [2, 4, 6]
+```
+
+---
+
+## **2. dropWhile() Method**  
+
+### **Definition:**  
+- The `dropWhile()` method **removes** elements **until** the predicate **fails** and processes the rest.
+- It is the **opposite** of `takeWhile()`. 
+
+### **Syntax:**  
+```java
+default Stream<T> dropWhile(Predicate<? super T> predicate)
+```
+
+### **Example:**  
+```java
+import java.util.*;
+import java.util.stream.*;
+
+public class DropWhileExample {
+    public static void main(String[] args) {
+        List<Integer> numbers = Arrays.asList(2, 4, 6, 3, 7, 8, 10);
+        
+        List<Integer> result = numbers.stream()
+                                    .dropWhile(n -> n % 2 == 0) // Drops even numbers at the beginning
+                                    .collect(Collectors.toList());
+        
+        System.out.println("After dropWhile: " + result);
+    }
+}
+```
+**Output:**  
+```
+After dropWhile: [3, 7, 8, 10]
+```
+
+---
+
+## **3. Stream.iterate() Method**  
+
+### **Definition:**  
+- The `iterate()` method in Java 9 prevents infinite loops by introducing a termination condition.  
+- It is similar to a **for-loop**.  
+
+### **Syntax:**  
+```java
+public static <T> Stream<T> iterate(T seed, Predicate<? super T> hasNext, UnaryOperator<T> next)
+```
+
+### **Example:**  
+```java
+import java.util.stream.*;
+
+public class IterateExample {
+    public static void main(String[] args) {
+        Stream.iterate(1, x -> x < 10, x -> x + 2)
+              .forEach(System.out::println);
+    }
+}
+```
+**Output:**  
+```
+1
+3
+5
+7
+9
+```
+
+---
+
+## **4. Stream.ofNullable() Method**  
+
+### **Definition:**  
+- The `ofNullable()` method helps prevent **NullPointerException** by returning an **empty stream** if the provided element is `null`.  
+
+### **Syntax:**  
+```java
+public static <T> Stream<T> ofNullable(T value)
+```
+
+### **Example:**  
+```java
+import java.util.*;
+import java.util.stream.*;
+
+public class OfNullableExample {
+    public static void main(String[] args) {
+        Stream.ofNullable("Hello").forEach(System.out::println);
+        Stream.ofNullable(null).forEach(System.out::println); // Won't print anything
+    }
+}
+```
+**Output:**  
+```
+Hello
+```
+
+---
+
+## **Conclusion**  
+Java 9 **Stream API enhancements** provide better control over stream processing with **takeWhile(), dropWhile(), iterate(), and ofNullable()**. These methods help in improving performance, avoiding infinite loops, and handling `null` values effectively.
+
+
+
