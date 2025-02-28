@@ -172,3 +172,86 @@ s1.forEach(System.out::println);
 
 With this, **Streams** enable efficient and declarative processing of collections with operations like filtering, mapping, sorting, and reducing, making the code more readable and concise.
 
+## Processing Objects by Using flatMap() Method
+
+Both **map()** and **flatMap()** can be applied to a `Stream<T>` and both return a `Stream<R>`. The difference between them is:
+- The `map()` operation produces **one output value** for each input value.
+- The `flatMap()` operation produces an **arbitrary number** (zero or more) values for each input value.
+
+A typical use case is when the mapper function in `flatMap()` returns:
+- `Stream.empty()` if it wants to send **zero** values.
+- `Stream.of(x, y, z)` if it wants to return **multiple** values.
+
+## Demo Program
+
+```java
+import java.util.*;
+import java.util.stream.*;
+
+public class Test {
+    public static void main(String[] args) {
+        ArrayList<Integer> l1 = new ArrayList<Integer>();
+        for (int i = 0; i <= 10; i++) {
+            l1.add(i);
+        }
+        System.out.println("Before using map() method: " + l1);
+
+        // Using flatMap to filter even numbers
+        List<Integer> l2 = l1.stream().flatMap(
+            i -> { 
+                if (i % 2 != 0) return Stream.empty(); 
+                else return Stream.of(i); 
+            }
+        ).collect(Collectors.toList());
+        System.out.println("After using flatMap() method: " + l2);
+
+        // Using flatMap to store both number and its square if it is even
+        List<Integer> l3 = l1.stream().flatMap(
+            i -> {
+                if (i % 2 != 0) return Stream.empty(); 
+                else return Stream.of(i, i * i); 
+            }
+        ).collect(Collectors.toList());
+        System.out.println("After using flatMap() method with squares: " + l3);
+    }
+}
+```
+
+### Output
+```
+Before using map() method: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+After using flatMap() method: [0, 2, 4, 6, 8, 10]
+After using flatMap() method with squares: [0, 0, 2, 4, 4, 16, 6, 36, 8, 64, 10, 100]
+```
+
+## Difference Between `map()` and `flatMap()`
+| Feature         | `map()`  | `flatMap()`  |
+|---------------|---------|------------|
+| Input-to-Output Mapping | One-to-One | One-to-Many |
+| Output Type | `Stream<T>` | `Stream<R>` |
+| Use Case | Transform each element | Flatten and transform collections |
+| Example | Convert list of strings to uppercase | Flatten list of lists into a single list |
+
+### Example of `map()`
+```java
+List<String> words = Arrays.asList("Hello", "World");
+List<String> mapped = words.stream().map(String::toUpperCase).collect(Collectors.toList());
+System.out.println(mapped); // [HELLO, WORLD]
+```
+
+### Example of `flatMap()`
+```java
+List<List<String>> nestedList = Arrays.asList(
+    Arrays.asList("Hello", "World"),
+    Arrays.asList("Java", "Streams")
+);
+List<String> flatMapped = nestedList.stream()
+    .flatMap(Collection::stream)
+    .collect(Collectors.toList());
+System.out.println(flatMapped); // [Hello, World, Java, Streams]
+```
+
+### Conclusion
+- **`map()`** is used for transforming **each element** of a collection.
+- **`flatMap()`** is used when you need to **flatten nested structures** before processing them further.
+
