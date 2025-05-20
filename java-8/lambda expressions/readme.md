@@ -4,7 +4,7 @@
 
 Lambda expressions in Java are a concise way to express instances of single-method interfaces (functional interfaces). They provide a way to write anonymous methods in a functional style, reducing boilerplate code and improving readability.
 
-A lambda expression is an **anonymous (nameless) function** that does not have a name, return type, or access modifiers. Lambda expressions are also known as **closures**.
+A lambda expression is an **anonymous (nameless) function** that does not have a name, return type, or access modifiers.
 
 ---
 
