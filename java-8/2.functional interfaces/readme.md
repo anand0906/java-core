@@ -419,5 +419,144 @@ public class SupplierExample {
 }
 ```
 
+#
+
+## 🔹 Method and Constructor References in Java using `::` Operator
+
+### ✅ What is Method Reference?
+
+A **method reference** allows you to refer to an existing method (either **static** or **instance**) by its name. It is a cleaner and more readable alternative to using lambda expressions when all you're doing is calling a method.
+
+#### Syntax:
+
+* **For static methods:**
+  `ClassName::methodName`
+
+* **For instance methods:**
+  `objectReference::methodName`
+
+> 📝 The only requirement is that the **argument types of the functional interface method and the referenced method must match**. Return types and method names do not need to match.
+
+---
+
+### ✅ Example: Using Lambda Expression vs Method Reference
+
+#### 🔸 With Lambda Expression:
+
+```java
+class Test {
+    public static void main(String[] args) {
+        Runnable r = () -> {
+            for(int i = 0; i <= 10; i++) {
+                System.out.println("Child Thread");
+            }
+        };
+        Thread t = new Thread(r);
+        t.start();
+
+        for(int i = 0; i <= 10; i++) {
+            System.out.println("Main Thread");
+        }
+    }
+}
+```
+
+#### 🔸 With Method Reference:
+
+```java
+class Test {
+    public static void m1() {
+        for(int i = 0; i <= 10; i++) {
+            System.out.println("Child Thread");
+        }
+    }
+
+    public static void main(String[] args) {
+        Runnable r = Test::m1;
+        Thread t = new Thread(r);
+        t.start();
+
+        for(int i = 0; i <= 10; i++) {
+            System.out.println("Main Thread");
+        }
+    }
+}
+```
+
+---
+
+### ✅ Method Reference to Instance Method
+
+```java
+interface Interf {
+    void m1(int i);
+}
+
+class Test {
+    public void m2(int i) {
+        System.out.println("From Method Reference: " + i);
+    }
+
+    public static void main(String[] args) {
+        Interf f = i -> System.out.println("From Lambda Expression: " + i);
+        f.m1(10);
+
+        Test t = new Test();
+        Interf i1 = t::m2;
+        i1.m1(20);
+    }
+}
+```
+
+---
+
+## 🔹 Constructor Reference
+
+Just like method reference, we can refer to a **constructor** using the `::new` syntax.
+
+#### Syntax:
+
+```java
+ClassName::new
+```
+
+### ✅ Example:
+
+```java
+class Sample {
+    private String s;
+
+    Sample(String s) {
+        this.s = s;
+        System.out.println("Constructor Executed: " + s);
+    }
+}
+
+interface Interf {
+    Sample get(String s);
+}
+
+class Test {
+    public static void main(String[] args) {
+        Interf f = s -> new Sample(s);
+        f.get("From Lambda Expression");
+
+        Interf f1 = Sample::new;
+        f1.get("From Constructor Reference");
+    }
+}
+```
+
+---
+
+### 🔸 Key Notes:
+
+* Method and constructor references provide a **more concise alternative** to lambda expressions.
+* They improve **code reusability** by allowing the use of **already existing methods/constructors**.
+* The **parameter types** of the referenced method **must match** those of the abstract method in the functional interface.
+
+---
+
+
 
 
