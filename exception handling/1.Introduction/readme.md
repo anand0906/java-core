@@ -121,6 +121,8 @@ Exception in thread "main" java.lang.ArithmeticException: / by zero
 ```
 **Exception Hierarchy in Java**
 
+<img src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*_jXNZuPLKMTQ5IKjBzb8jA.png" />
+
 `Throwable` acts as the root for the exception hierarchy in Java. It has two direct child classes:
 
 1. **Exception**
