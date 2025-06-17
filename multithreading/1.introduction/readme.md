@@ -184,6 +184,8 @@ main method
 3. **Running State** – When CPU is allocated
 4. **Dead State** – After completion of `run()`
 
+<img src="https://javatrainingschool.com/wp-content/uploads/2021/09/image-13-1536x715.png">
+
 #### Case 9: Restarting a Thread
 
 ```java
