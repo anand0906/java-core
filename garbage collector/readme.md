@@ -238,3 +238,215 @@ Free memory of the heap: 5049776
 
 5. **Limitations in Java**:
    - It is not possible to find the size of an object or the address of an object in Java.
+
+# Finalization and Garbage Collection in Java
+
+## Finalization
+
+* Just before destroying any object, the garbage collector (GC) always calls the `finalize()` method to perform cleanup activities.
+* If the corresponding class contains a `finalize()` method, it will be executed. Otherwise, the `Object` class's `finalize()` method will be executed.
+
+```java
+protected void finalize() throws Throwable
+```
+
+---
+
+## Case 1: GC Calls `finalize()` Automatically
+
+Just before destroying any object, GC calls the `finalize()` method on the object which is eligible for garbage collection. The corresponding class's `finalize()` method will be executed.
+
+For example, if a `String` object is eligible for GC, then the `String` class’s `finalize()` method is executed, not the `Test` class’s.
+
+### Example 1:
+
+```java
+class Test {
+  public static void main(String args[]) {
+    String s = new String("bhaskar");
+    Test t = new Test();
+    s = null;
+    System.gc();
+    System.out.println("End of main.");
+  }
+
+  public void finalize() {
+    System.out.println("finalize() method is executed");
+  }
+}
+```
+
+**Output:**
+
+```
+End of main.
+```
+
+In this program, the `String` class's `finalize()` method is called, which has an empty implementation.
+
+### Example 2:
+
+```java
+class Test {
+  public static void main(String args[]) {
+    String s = new String("bhaskar");
+    Test t = new Test();
+    t = null;
+    System.gc();
+    System.out.println("End of main.");
+  }
+
+  public void finalize() {
+    System.out.println("finalize() method is executed");
+  }
+}
+```
+
+**Output:**
+
+```
+finalize() method is executed
+End of main
+```
+
+---
+
+## Case 2: Explicitly Calling `finalize()`
+
+You can call the `finalize()` method explicitly. It will be executed like a normal method call, and the object won’t be destroyed. However, before destroying any object, GC still calls `finalize()`.
+
+### Example:
+
+```java
+class Test {
+  public static void main(String args[]) {
+    Test t = new Test();
+    t.finalize();
+    t.finalize();
+    t = null;
+    System.gc();
+    System.out.println("End of main.");
+  }
+
+  public void finalize() {
+    System.out.println("finalize() method called");
+  }
+}
+```
+
+**Output:**
+
+```
+finalize() method called.
+finalize() method called.
+finalize() method called.
+End of main.
+```
+
+In this program, `finalize()` is called 3 times: twice explicitly and once by GC.
+
+**Note:**
+In Servlets, we can call the `destroy()` method explicitly from `init()` and `service()` methods. This behaves like a normal method call, and the Servlet object won't be destroyed.
+
+---
+
+## Case 3: Exceptions in `finalize()`
+
+The `finalize()` method can be called either by the programmer or the GC.
+
+* If the programmer calls it and an exception is raised (and uncaught), the program terminates abnormally.
+* If the GC calls it and an uncaught exception is raised, the JVM ignores it and the program terminates normally.
+
+### Example:
+
+```java
+class Test {
+  public static void main(String args[]) {
+    Test t = new Test();
+    // t.finalize(); // Uncommenting this line leads to abnormal termination
+    t = null;
+    System.gc();
+    System.out.println("End of main.");
+  }
+
+  public void finalize() {
+    System.out.println("finalize() method called");
+    System.out.println(10 / 0);
+  }
+}
+```
+
+**Correct Statement:**
+
+* While executing `finalize()`, the JVM **ignores only uncaught exceptions** (**Valid**).
+* The statement that JVM ignores **every exception** is **Invalid**.
+
+---
+
+## Case 4: GC Calls `finalize()` Only Once per Object
+
+### Example:
+
+```java
+class FinalizeDemo {
+  static FinalizeDemo s;
+
+  public static void main(String args[]) throws Exception {
+    FinalizeDemo f = new FinalizeDemo();
+    System.out.println(f.hashCode());
+    f = null;
+    System.gc();
+    Thread.sleep(5000);
+    System.out.println(s.hashCode());
+    s = null;
+    System.gc();
+    Thread.sleep(5000);
+    System.out.println("End of main method");
+  }
+
+  public void finalize() {
+    System.out.println("finalize method called");
+    s = this;
+  }
+}
+```
+
+**Output:**
+
+```
+4072869
+finalize method called
+4072869
+End of main method
+```
+
+**Note:**
+GC behavior is vendor-dependent and may vary between JVMs. Therefore, we can’t predict exact answers for:
+
+1. The algorithm used by the GC.
+2. When exactly the GC will run.
+3. The order in which objects are identified as eligible.
+4. The order in which objects are destroyed.
+5. Whether all eligible objects will be destroyed.
+
+JVM usually runs GC when the application is low on memory, but the exact timing is not guaranteed. Most GCs follow the **Mark and Sweep** algorithm, but it's not universal.
+
+---
+
+## Memory Leaks
+
+* An object that is no longer used in the application but is not eligible for GC is called a **memory leak**.
+* In the case of memory leaks, even the GC can't clean up the memory, potentially causing application crashes.
+* If an object is no longer required, it's recommended to make it eligible for GC.
+* Memory leaks may eventually lead to `OutOfMemoryException`.
+* You can detect memory leaks using monitoring tools.
+
+### Examples of Monitoring Tools:
+
+* HPJMeter
+* HP OpenView (OVO)
+* IBM Tivoli
+* JProbe
+* Patrol
+* Other memory management tools
+
