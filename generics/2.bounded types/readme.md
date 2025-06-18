@@ -22,8 +22,8 @@ In unbounded types, there are no restrictions on the type parameter - any type c
 ### Bounded Types
 
 ```java
-class Test<T extends SomeClass> {
-    // T must be SomeClass or its subclass
+class Test<T extends x> {
+    // T must be x or its subclass
 }
 ```
 
