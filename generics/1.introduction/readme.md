@@ -164,4 +164,150 @@ ArrayList<Integer> list = new ArrayList<Integer>(); // Correct
 
 ---
 
-Generics improve code clarity, type safety, and runtime reliability. They're a key part of Java’s type system since version 1.5.
+# Java Generics
+
+## Overview
+
+Generic classes provide type safety and eliminate the need for type casting in Java. They were introduced in Java 1.5 to address the limitations of non-generic collections.
+
+## Non-Generic Classes (Before Java 1.5)
+
+### ArrayList Before Generics
+
+Until Java 1.4, the ArrayList class was declared without generics:
+
+```java
+class ArrayList {
+    add(Object o);
+    Object get(int index);
+}
+```
+
+### Problems with Non-Generic Approach
+
+- **No Type Safety**: The `add()` method accepts `Object` as argument, allowing any type of object to be added
+- **Type Casting Required**: The `get()` method returns `Object`, requiring explicit type casting during retrieval
+- **Runtime Errors**: Type mismatches are only caught at runtime
+
+---
+
+## Generic Classes (Java 1.5+)
+
+### Generic ArrayList Declaration
+
+In Java 1.5, ArrayList was redesigned with generics:
+
+```java
+class ArrayList<T> {
+    add(T t);
+    T get(int index);
+}
+```
+
+### Benefits of Generic Approach
+
+- **Type Safety**: Only specified type can be added to the collection
+- **No Type Casting**: Direct assignment without casting
+- **Compile-Time Error Detection**: Type mismatches caught during compilation
+
+### Example Usage
+
+```java
+ArrayList<String> l = new ArrayList<String>();
+```
+
+The compiler treats this as:
+
+```java
+class ArrayList {
+    add(String s);
+    String get(int index);
+}
+```
+
+#### Type Safety Example
+
+```java
+// This will cause compile-time error if trying to add non-String objects
+l.add("Hello"); // Valid
+l.add(123);     // Compile-time error
+```
+
+#### No Type Casting Required
+
+```java
+// Direct assignment without casting
+String value = l.get(0); // No need for (String) l.get(0)
+```
+
+## Creating Custom Generic Classes
+
+### Generic Class Definition
+
+A generic class is a class with type parameters. You can create your own generic classes:
+
+```java
+class Account<T> {
+    // Class implementation
+}
+
+// Usage
+Account<String> g1 = new Account<String>();
+Account<Integer> g2 = new Account<Integer>();
+```
+
+### Complete Generic Class Example
+
+```java
+class Gen<T> {
+    T obj;
+    
+    Gen(T obj) {
+        this.obj = obj;
+    }
+    
+    public void show() {
+        System.out.println("The type of object is: " + obj.getClass().getName());
+    }
+    
+    public T getObject() {
+        return obj;
+    }
+}
+```
+
+### Demo Implementation
+
+```java
+class GenericsDemo {
+    public static void main(String[] args) {
+        // Integer generic
+        Gen<Integer> g1 = new Gen<Integer>(10);
+        g1.show();
+        System.out.println(g1.getObject());
+        
+        // String generic
+        Gen<String> g2 = new Gen<String>("Akshay");
+        g2.show();
+        System.out.println(g2.getObject());
+        
+        // Double generic
+        Gen<Double> g3 = new Gen<Double>(10.5);
+        g3.show();
+        System.out.println(g3.getObject());
+    }
+}
+```
+
+### Output
+
+```
+The type of object is: java.lang.Integer
+10
+The type of object is: java.lang.String
+Akshay
+The type of object is: java.lang.Double
+10.5
+```
+
+---
