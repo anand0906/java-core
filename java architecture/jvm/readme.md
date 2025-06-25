@@ -51,26 +51,7 @@ These Virtual Machines Acts as Runtime Engines to Run a Particular Programming L
 
 ## Basic JVM Architecture
 
-```
-                        Class Files
-                      ClassLoader
-                      Sub System
-
-    Method    Heap    Stack    PC       Native
-    Area      Area    Area     Registers Method
-                                        Stacks
-
-    Various Memory Areas of JVM Data
-
-                    Execution
-                    Engine
-
-    Native          Native       Native
-    Method          Method       Method
-    Interface       Libraries    Libraries
-
-                        OS
-```
+<img src="https://raw.githubusercontent.com/anand0906/java-core/refs/heads/main/java%20architecture/jvm/images/1.Jvm%20Basic%20Architecture.JPG" />
 
 ## ClassLoader Sub System
 
@@ -97,20 +78,7 @@ ClassLoader Sub System is Responsible for the following 3 Activities:
 
 - After loading .class File Immediately JVM will Creates an Object of the Type class Class to Represent Class Level Binary Information on the Heap Memory
 
-```
-Student.class        Student.class
-Information    →     Class Object for
-                     Student.class
-    ↓                     ↑
-                         Used
-                         By
-                      Programmer
-
-Customer.class  →    Class Object for
-Information          Customer.class
-
-Method Area          Heap Area
-```
+<img src="https://raw.githubusercontent.com/anand0906/java-core/refs/heads/main/java%20architecture/jvm/images/2.Method%20area.JPG" />
 
 **Example Code:**
 ```java
