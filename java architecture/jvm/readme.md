@@ -260,21 +260,7 @@ Application ClassLoader
 - ExtensionClassLoader will Search in Extension Class Path (`jdk/jre/lib/ext`). If the required .class File is Available then it will be Loaded, Otherwise it Delegates that Request to ApplicationClassLoader
 - ApplicationClassLoader will Search in Application Class Path (Current Working Directory). If the specified .class is Already Available, then it will be Loaded. Otherwise we will get Runtime Exception Saying `ClassNotFoundException` OR `NoClassDefFoundError`
 
-```
-Bootstrap ClassLoader
-  ↓ Searches Bootstrap Class Path
-  ↓ In (%JAVA_HOME%\jre\lib\rt.jar)
-  ↓ Delegates
-
-Extension ClassLoader
-  ↓ Searches Extension Class Path  
-  ↓ In (%JAVA_HOME\jre\lib\ext)
-  ↓ Delegates
-
-Request → ClassLoader Sub System → Application ClassLoader
-                                     ↓ Searches Application Class Path
-                                     ↓ In (Environment Variable Class Path)
-```
+<img src="https://github.com/anand0906/java-core/blob/main/java%20architecture/jvm/images/3.Execution%20Flow%20Of%20ClassLoader.JPG?raw=true" />
 
 ### Example:
 
@@ -529,14 +515,7 @@ Each Stack Frame contains 3 Parts:
 
 **Example:** `public void m1(int i, long l, Object o, byte b, double d){}`
 
-```
-┌─────┬─────┬─────┬─────┬─────┬─────┬─────┐
-│ int │ long│long │Object│float│double│double│
-├─────┼─────┼─────┼─────┼─────┼─────┼─────┤
-│  0  │  1  │  2  │  3  │  4  │  5  │  6  │
-└─────┴─────┴─────┴─────┴─────┴─────┴─────┘
-Local Variable Array
-```
+<img src="https://github.com/anand0906/java-core/blob/main/java%20architecture/jvm/images/4.stack%20frame%20local.JPG?raw=true" />
 
 #### Operand Stack:
 
@@ -544,21 +523,8 @@ Local Variable Array
 - Some Instructions can Push the Values to the Operand Stack and Some Instructions can Pop the Values from Operand Stack and Perform required Operations and Store Result Once Again Back to the Operand Stack
 
 **Example:**
-```
-Program         Before    After     After     After     After
-                Storing   i-load 0  i-load 1  i-add     i-store
 
-i-load 0        ┌─────────┬─────────┬─────────┬─────────┬─────────┐
-i-load 1        │0   100  │0   100  │0   100  │0   100  │0   100  │
-i-add           │1    80  │1    80  │1    80  │1    80  │1    80  │
-i-store 2       │2       │2       │2       │2   180  │2   180  │
-                └─────────┴─────────┴─────────┴─────────┴─────────┘
-                Local Variable Array
-
-                Operand Stack:
-                          │   100   │   100   │   180   │
-                          │         │    80   │         │
-```
+<img src="https://github.com/anand0906/java-core/blob/main/java%20architecture/jvm/images/5.stack%20operand.JPG?raw=true" />
 
 #### Frame Data:
 
@@ -617,23 +583,7 @@ i-store 2       │2       │2       │2       │2   180  │2   180  │
 - JVM Interprets Total Program Line by Line at least Once
 - JIT Compilation is Applicable Only for Repeatedly invoked Methods. But Not for Every Method
 
-```
-┌─────────────────────────────────────────┐
-│           Execution Engine              │
-├─────────────────────────────────────────┤
-│              JIT Compiler               │
-├─────────────────────────────────────────┤
-│    Intermediate Code Generator          │
-├─────────────────────────────────────────┤
-│  Profiler    │   Code Optimizer         │
-├──────────────┼──────────────────────────┤
-│ Interpreter  │   Garbage Collector      │
-├──────────────┼──────────────────────────┤
-│    Target Code Generator                │
-├─────────────────────────────────────────┤
-│       Target Machine Code               │
-└─────────────────────────────────────────┘
-```
+<img src="https://github.com/anand0906/java-core/blob/main/java%20architecture/jvm/images/6.Execution%20Engine.JPG?raw=true" />
 
 ## Java Native Interface (JNI)
 
@@ -736,57 +686,4 @@ It Provides Information About All Attributes Present in the Current Class File.
 
 ## Complete JVM Flow Diagram
 
-```
-Java Source File    →    ClassLoader Sub System
-(.java File)             Loading → Linking → Initialization
-       ↓                    ↓        ↓           ↓
-Java Compiler           Bootstrap  Verification  
-(javac)                ClassLoader    ↓
-       ↓                Extension   Preparation
-Java Class File        ClassLoader    ↓
-(.class) Byte Code     Application  Resolution
-                      ClassLoader
-
-┌─────────────────────────────────────────────────────────────────────┐
-│                 VARIOUS MEMORY AREAS OF JVM                        │
-├─────────┬─────────┬─────────┬─────────────┬─────────────────────────┤
-│ Method  │  Heap   │ Stack   │PC Registers │ Native Method           │
-│  Area   │  Area   │ Memory  │    Area     │ Stacks Area            │
-├─────────┼─────────┼─────────┼─────────────┼─────────────────────────┤
-│Class    │Object   │   t1    │PC Register  │       t1    t2    tn    │
-│Data     │Data     │   t2    │For t1       │                         │
-│Class    │Object   │   tn    │     :       │                         │
-│Data     │Data     │         │     :       │                         │
-│Class    │Object   │Local    │PC Register  │                         │
-│Data     │Data     │Variable │For tn       │                         │
-│Class    │Object   │Array    │             │                         │
-│Data     │Data     │Operand  │             │                         │
-│         │         │Stack    │             │                         │
-│         │         │Frame    │             │                         │
-│         │         │Data     │             │                         │
-└─────────┴─────────┴─────────┴─────────────┴─────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────────────┐
-│                        Execution Engine                            │
-├─────────────────────────────────────────────────────────────────────┤
-│    I    │              JIT Compiler                                │
-│    N    │  ┌─────────────────────────────────────────────────────┐  │
-│    T    │  │         Intermediate Code Generator                 │  │
-│    E    │  ├─────────────────────────────────────────────────────┤  │
-│    R    │  │  Profiler  │         Code Optimizer               │  │
-│    P    │  ├────────────┼──────────────────────────────────────┤  │
-│    R    │  │  Garbage   │                                      │  │
-│    E    │  │ Collector  │                                      │  │
-│    T    │  ├────────────┼──────────────────────────────────────┤  │
-│    E    │  │         Target Code Generator                    │  │
-│    R    │  └─────────────────────────────────────────────────────┘  │
-└─────────┴─────────────────────────────────────────────────────────────┘
-                              ↓
-┌─────────────────────────────────────────────────────────────────────┐
-│  Java Native Interface  │       Native Method Libraries            │
-└─────────────────────────────────────────────────────────────────────┘
-                              ↓
-┌─────────────────────────────────────────────────────────────────────┐
-│                    Target Machine Code                             │
-└─────────────────────────────────────────────────────────────────────┘
-```
+<img src="https://github.com/anand0906/java-core/blob/main/java%20architecture/jvm/images/7.Total%20architecture.JPG?raw=true" />
